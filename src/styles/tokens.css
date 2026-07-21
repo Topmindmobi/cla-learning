@@ -1,0 +1,141 @@
+:root {
+  --ink: #0e1420;
+  --ink2: #2c3852;
+  --muted: #69748c;
+  --line: #e4e8f0;
+  --line2: #eef1f6;
+  --paper: #ffffff;
+  --wash: #f5f7fb;
+  --brand: #1f4fd8;
+  --brand-soft: #eaf0ff;
+  --moss: #0e7a5f;
+  --moss-soft: #e4f3ee;
+  --amber: #b7791f;
+  --amber-soft: #fbf2df;
+  --rose: #b42318;
+  --rose-soft: #feecea;
+  --r: 14px;
+  --shadow: 0 1px 2px rgba(14, 20, 32, 0.05), 0 10px 30px -16px rgba(14, 20, 32, 0.2);
+}
+
+.serif {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.mono {
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.cla-btn {
+  display: inline-block;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-weight: 500;
+  font-size: 14.5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.cla-btn:hover {
+  background: var(--wash);
+}
+
+.cla-btn.primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.cla-btn.primary:hover {
+  background: #1a44bd;
+}
+
+.cla-btn.dark {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.cla-btn.sm {
+  padding: 5px 10px;
+  font-size: 12.5px;
+  border-radius: 7px;
+}
+
+.cla-btn.ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--brand);
+}
+
+.cla-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 99px;
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--wash);
+  color: var(--ink2);
+}
+
+.cla-pill.brand {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.cla-pill.moss {
+  background: var(--moss-soft);
+  color: var(--moss);
+}
+
+.cla-pill.amber {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.cla-pill.rose {
+  background: var(--rose-soft);
+  color: var(--rose);
+}
+
+.cla-link {
+  color: var(--brand);
+  font-weight: 500;
+  font-size: 14.5px;
+  text-decoration: none;
+}
+
+.dotm {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.cla-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+}
+
+.cla-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}

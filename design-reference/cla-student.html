@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cornerstone — Luthien Advisory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1420; --ink2:#2C3852; --muted:#69748C; --line:#E4E8F0;
+  --paper:#FFFFFF; --wash:#F5F7FB; --brand:#1F4FD8; --brand-soft:#EAF0FF;
+  --moss:#0E7A5F; --moss-soft:#E4F3EE; --amber:#B7791F; --amber-soft:#FBF2DF;
+  --r:14px; --shadow:0 1px 2px rgba(14,20,32,.05), 0 8px 24px -12px rgba(14,20,32,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--wash);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.serif{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:0}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+
+/* ---------- top bar ---------- */
+header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:28px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mark{width:28px;height:28px;display:block}
+.logo b{font-family:"Instrument Serif",serif;font-weight:400;font-size:23px;letter-spacing:-.01em}
+.logo span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+nav.main{display:flex;gap:4px;margin-left:4px}
+nav.main button{background:none;border:0;padding:8px 12px;border-radius:8px;color:var(--ink2);font-weight:500;font-size:14px}
+nav.main button:hover{background:var(--wash)}
+nav.main button[aria-current="page"]{color:var(--brand);background:var(--brand-soft)}
+.search{flex:1;max-width:380px;margin-left:auto;position:relative}
+.search input{width:100%;height:38px;border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:0 14px 0 38px;font:inherit;font-size:14px}
+.search svg{position:absolute;left:13px;top:11px;color:var(--muted)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600;flex-shrink:0}
+.icon-btn{width:36px;height:36px;border:0;background:none;border-radius:9px;display:grid;place-items:center;color:var(--ink2);position:relative}
+.icon-btn:hover{background:var(--wash)}
+.dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--brand);border:2px solid #fff}
+
+/* ---------- shared ---------- */
+.view{display:none;padding:32px 0 72px}
+.view.on{display:block}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.eyebrow{color:var(--muted)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:38px 0 14px}
+.sec-head h2{font-size:19px}
+.link{color:var(--brand);font-size:14px;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500;background:var(--wash);color:var(--ink2)}
+.pill.moss{background:var(--moss-soft);color:var(--moss)}
+.pill.amber{background:var(--amber-soft);color:var(--amber)}
+.pill.brand{background:var(--brand-soft);color:var(--brand)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:9px 16px;font-weight:500;font-size:14px}
+.btn:hover{background:var(--wash)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:#1a44bd}
+.btn.ghost{border-color:transparent;background:transparent}
+
+/* ---------- signature: cornerstone wall ---------- */
+.wall{display:flex;flex-direction:column;gap:3px}
+.course{display:flex;gap:3px}
+.brick{height:9px;flex:1;border-radius:2px;background:var(--line)}
+.brick.done{background:var(--moss)}
+.brick.now{background:var(--brand);box-shadow:0 0 0 2px var(--brand-soft)}
+.course:nth-child(even){padding-left:14px;padding-right:0}
+.course:nth-child(odd){padding-right:14px}
+
+/* ---------- dashboard ---------- */
+.hello{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hello h1{font-size:34px}
+.hello .serif{font-style:italic}
+.streak{display:flex;gap:5px;align-items:center}
+.day{width:26px;height:26px;border-radius:7px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.day.hit{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.resume{display:grid;grid-template-columns:1.55fr 1fr;gap:0;margin-top:22px;overflow:hidden}
+.resume-l{padding:28px 30px}
+.resume-r{background:var(--ink);color:#fff;padding:28px 30px;display:flex;flex-direction:column;justify-content:space-between}
+.resume h3{font-size:24px;margin:8px 0 6px}
+.resume .lesson{color:var(--muted);font-size:14px}
+.meter{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+.meter b{font-size:30px;font-family:"Instrument Serif",serif;font-weight:400;line-height:1}
+.resume-r .mono{color:#8FA3C9}
+.resume-r h4{font-size:15px;font-weight:600;margin-top:6px}
+.resume-r .brick{background:rgba(255,255,255,.16)}
+.resume-r .brick.done{background:#5FD3AE}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.stat{padding:18px 20px}
+.stat b{display:block;font-family:"Instrument Serif",serif;font-weight:400;font-size:32px;line-height:1.1;margin-top:6px}
+.stat small{color:var(--muted);font-size:13px}
+
+.split{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.clist{display:flex;flex-direction:column;gap:14px}
+.crow{display:flex;gap:18px;padding:18px 20px;align-items:center}
+.thumb{width:88px;height:66px;border-radius:10px;flex-shrink:0;background:var(--brand-soft);display:grid;place-items:center;color:var(--brand)}
+.thumb.b{background:var(--moss-soft);color:var(--moss)}
+.thumb.c{background:var(--amber-soft);color:var(--amber)}
+.crow .meta{flex:1;min-width:0}
+.crow h4{font-size:16px;margin-bottom:3px}
+.crow .sub{color:var(--muted);font-size:13px;margin-bottom:10px}
+.crow .wall{max-width:280px}
+
+.side .card{padding:18px 20px;margin-bottom:16px}
+.due{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.due:last-child{border:0;padding-bottom:0}
+.due .when{width:42px;flex-shrink:0;text-align:center}
+.due .when b{display:block;font-size:16px;font-family:"Instrument Serif",serif;font-weight:400}
+.due .when small{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.due p{margin:0;font-size:14px;font-weight:500}
+.due span{font-size:12.5px;color:var(--muted)}
+.cert{background:linear-gradient(150deg,#101828,#1E2B47);color:#fff;border:0}
+.cert h4{font-size:17px;margin:10px 0 4px}
+.cert p{color:#A9B6D0;font-size:13px;margin:0 0 14px}
+.cert .btn{background:#fff;border-color:#fff;width:100%}
+
+/* ---------- catalog ---------- */
+.cat-head{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}
+.cat-head h1{font-size:34px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:7px 14px;font-size:13.5px;color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.ccard{overflow:hidden;display:flex;flex-direction:column;transition:transform .16s ease, box-shadow .16s ease}
+.ccard:hover{transform:translateY(-3px);box-shadow:0 12px 32px -14px rgba(14,20,32,.28)}
+.cover{height:132px;position:relative;display:grid;place-items:center}
+.cover .mono{position:absolute;left:14px;top:12px;color:rgba(255,255,255,.75)}
+.ccard .body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.ccard h4{font-size:16.5px;line-height:1.3;margin-bottom:6px}
+.ccard p{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.ccard .foot{margin-top:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.star{color:var(--amber);font-weight:600}
+
+/* ---------- course player ---------- */
+.player{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.outline{padding:6px 0;position:sticky;top:88px}
+.outline .mod{border-bottom:1px solid var(--line)}
+.outline .mod:last-child{border:0}
+.mod > .t{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;font-weight:600;font-size:14px}
+.mod .t small{color:var(--muted);font-weight:400}
+.les{display:flex;gap:10px;align-items:center;padding:9px 18px 9px 18px;font-size:13.5px;color:var(--ink2)}
+.les:last-child{padding-bottom:16px}
+.les:hover{background:var(--wash)}
+.les.active{background:var(--brand-soft);color:var(--brand);font-weight:500;box-shadow:inset 3px 0 0 var(--brand)}
+.tick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:grid;place-items:center}
+.tick.done{background:var(--moss);border-color:var(--moss);color:#fff}
+.stage{aspect-ratio:16/9;background:#0B0F18;border-radius:var(--r);display:grid;place-items:center;color:#4E5D7C;position:relative;overflow:hidden}
+.stage .play{width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center;color:#fff;backdrop-filter:blur(4px)}
+.scrub{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.15)}
+.scrub i{display:block;height:100%;width:38%;background:var(--brand)}
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:22px 0 18px}
+.tabs button{background:none;border:0;padding:0 0 11px;font-size:14px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
+.prose{max-width:62ch;font-size:15px;color:var(--ink2)}
+.prose h3{font-size:20px;margin:0 0 10px;color:var(--ink)}
+.prose ul{padding-left:18px}
+.prose li{margin:6px 0}
+.navrow{display:flex;justify-content:space-between;margin-top:26px;gap:12px}
+
+footer{border-top:1px solid var(--line);background:var(--paper);padding:26px 0;color:var(--muted);font-size:13px}
+
+@media (max-width:960px){
+  .resume{grid-template-columns:1fr}
+  .split,.player{grid-template-columns:1fr}
+  .grid,.grid3{grid-template-columns:repeat(2,1fr)}
+  .outline{position:static}
+  .search{display:none}
+}
+@media (max-width:620px){
+  .grid,.grid3{grid-template-columns:1fr}
+  nav.main{overflow:auto}
+  .hello h1{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo">
+      <svg class="mark" viewBox="0 0 28 28" fill="none"><rect x="1" y="14" width="12" height="6" rx="1.5" fill="#0E1420"/><rect x="15" y="14" width="12" height="6" rx="1.5" fill="#0E1420" opacity=".35"/><rect x="1" y="21" width="26" height="6" rx="1.5" fill="#0E1420" opacity=".2"/><rect x="8" y="7" width="12" height="6" rx="1.5" fill="#1F4FD8"/></svg>
+      <div><b>Cornerstone</b><span>Luthien Advisory</span></div>
+    </div>
+    <nav class="main">
+      <button data-view="dash" aria-current="page">Dashboard</button>
+      <button data-view="cat">Catalog</button>
+      <button data-view="course">My course</button>
+    </nav>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+      <input placeholder="Search courses, skills, instructors">
+    </div>
+    <button class="icon-btn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8a4 4 0 118 0c0 4 1.5 5 1.5 5h-11S6 12 6 8z"/><path d="M8.5 16a1.8 1.8 0 003 0"/></svg><i class="dot"></i></button>
+    <div class="avatar">FK</div>
+  </div>
+</header>
+
+<!-- ============ DASHBOARD ============ -->
+<main class="view on wrap" id="dash">
+  <div class="hello">
+    <div>
+      <div class="mono eyebrow">Tuesday, 21 July</div>
+      <h1>Good afternoon, Fredo — <span class="serif">two lessons to go</span></h1>
+    </div>
+    <div>
+      <div class="mono eyebrow" style="margin-bottom:6px">6-day streak</div>
+      <div class="streak">
+        <div class="day hit">M</div><div class="day hit">T</div><div class="day hit">W</div>
+        <div class="day hit">T</div><div class="day hit">F</div><div class="day hit">S</div><div class="day">S</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="card resume">
+    <div class="resume-l">
+      <span class="pill brand">In progress</span>
+      <h3>Applied AI for Development Programmes</h3>
+      <p class="lesson">Module 3 · Lesson 4 — Designing prompts for field data collection · 12 min left</p>
+      <div class="meter" style="margin-top:18px"><b>62%</b><span class="eyebrow">of 34 lessons complete</span></div>
+      <div class="wall" style="max-width:420px">
+        <div class="course"><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i></div>
+        <div class="course"><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick now"></i><i class="brick"></i><i class="brick"></i></div>
+        <div class="course"><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i></div>
+      </div>
+      <div style="margin-top:22px;display:flex;gap:10px">
+        <button class="btn primary" data-goto="course">Resume lesson</button>
+        <button class="btn" data-goto="course">View syllabus</button>
+      </div>
+    </div>
+    <div class="resume-r">
+      <div>
+        <div class="mono">Up next this week</div>
+        <h4>Peer review: two submissions</h4>
+        <p style="color:#A9B6D0;font-size:13.5px;margin:4px 0 0">Opens once you finish Module 3. Reviews close Friday 17:00 EAT.</p>
+      </div>
+      <div>
+        <div class="mono" style="margin-bottom:8px">Certificate track</div>
+        <div class="wall">
+          <div class="course"><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick"></i></div>
+          <div class="course"><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i></div>
+        </div>
+        <p style="color:#A9B6D0;font-size:13px;margin:10px 0 0">3 of 7 requirements met</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid3">
+    <div class="card stat"><small>Learning time this month</small><b>11h 40m</b></div>
+    <div class="card stat"><small>Assessments passed</small><b>8 / 10</b></div>
+    <div class="card stat"><small>Cohort rank</small><b>12th <span style="font-size:14px;color:var(--muted)">of 148</span></b></div>
+  </div>
+
+  <div class="split" style="margin-top:34px">
+    <div>
+      <div class="sec-head" style="margin-top:0"><h2>Your courses</h2><a class="link" href="#">See all 6</a></div>
+      <div class="clist">
+        <article class="card crow">
+          <div class="thumb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg></div>
+          <div class="meta">
+            <h4>Applied AI for Development Programmes</h4>
+            <div class="sub">Module 3 of 5 · next: Designing prompts for field data collection</div>
+            <div class="wall"><div class="course"><i class="brick done"></i><i class="brick done"></i><i class="brick done"></i><i class="brick now"></i><i class="brick"></i></div></div>
+          </div>
+          <button class="btn primary" data-goto="course">Resume</button>
+        </article>
+        <article class="card crow">
+          <div class="thumb b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5M4 19h16"/><path d="M8 15v-4M12 15V8M16 15v-6"/></svg></div>
+          <div class="meta">
+            <h4>Monitoring, Evaluation and Data Analysis</h4>
+            <div class="sub">Module 2 of 4 · quiz due Thursday</div>
+            <div class="wall"><div class="course"><i class="brick done"></i><i class="brick done"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i></div></div>
+          </div>
+          <button class="btn">Resume</button>
+        </article>
+        <article class="card crow">
+          <div class="thumb c"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.7 2.2 3 5 3s5-1.3 5-3v-5"/></svg></div>
+          <div class="meta">
+            <h4>Governance and Board Effectiveness</h4>
+            <div class="sub">Not started · 9 lessons · 3h 20m</div>
+            <div class="wall"><div class="course"><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i><i class="brick"></i></div></div>
+          </div>
+          <button class="btn">Start</button>
+        </article>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="card">
+        <div class="mono eyebrow" style="margin-bottom:10px">Due soon</div>
+        <div class="due"><div class="when"><b>23</b><small>Jul</small></div><div><p>Quiz — Indicator design</p><span>MEL &amp; Data Analysis</span></div></div>
+        <div class="due"><div class="when"><b>25</b><small>Jul</small></div><div><p>Peer reviews (2)</p><span>Applied AI for Programmes</span></div></div>
+        <div class="due"><div class="when"><b>29</b><small>Jul</small></div><div><p>Live clinic, 15:00 EAT</p><span>With Dr. A. Wanjiru</span></div></div>
+      </div>
+      <div class="card cert">
+        <span class="pill amber">Certificate</span>
+        <h4>Applied AI Practitioner</h4>
+        <p>Finish Module 4, pass the capstone review, and log 20 practice hours to qualify.</p>
+        <button class="btn">See requirements</button>
+      </div>
+      <div class="card">
+        <div class="mono eyebrow" style="margin-bottom:8px">Recommended next</div>
+        <h4 style="font-size:15px;margin-bottom:4px">Data Storytelling for Non-Analysts</h4>
+        <p style="color:var(--muted);font-size:13px;margin:0 0 12px">Pairs with the analysis work in your MEL course.</p>
+        <button class="btn" data-goto="cat" style="width:100%">Preview course</button>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ============ CATALOG ============ -->
+<main class="view wrap" id="cat">
+  <div class="cat-head">
+    <div>
+      <div class="mono eyebrow">Catalog</div>
+      <h1>Build the practice, <span class="serif" style="font-style:italic">course by course</span></h1>
+      <p style="color:var(--muted);max-width:52ch;margin:8px 0 0">Short, applied programmes for advisory, development and public-sector teams. Every course ends in something you can use at work on Monday.</p>
+    </div>
+    <div style="text-align:right"><span class="pill">42 courses</span> <span class="pill">7 certificate tracks</span></div>
+  </div>
+
+  <div class="filters">
+    <button class="chip" aria-pressed="true">All</button>
+    <button class="chip" aria-pressed="false">AI &amp; digital</button>
+    <button class="chip" aria-pressed="false">Monitoring &amp; evaluation</button>
+    <button class="chip" aria-pressed="false">Governance</button>
+    <button class="chip" aria-pressed="false">Finance</button>
+    <button class="chip" aria-pressed="false">Facilitation</button>
+    <button class="chip" aria-pressed="false" style="margin-left:auto">Beginner</button>
+    <button class="chip" aria-pressed="false">Under 4 hours</button>
+  </div>
+
+  <div class="grid" id="catgrid"></div>
+</main>
+
+<!-- ============ COURSE ============ -->
+<main class="view wrap" id="course">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+    <button class="btn ghost" data-goto="dash" style="padding-left:0">← Dashboard</button>
+    <span class="pill brand">62% complete</span>
+  </div>
+  <h1 style="font-size:26px;margin-bottom:22px">Applied AI for Development Programmes</h1>
+
+  <div class="player">
+    <div class="card outline">
+      <div class="mod">
+        <div class="t">1. Foundations <small>4/4</small></div>
+        <div class="les"><span class="tick done"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 5.2l2.3 2.3L8.5 2.8"/></svg></span> What these tools actually do</div>
+        <div class="les"><span class="tick done"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 5.2l2.3 2.3L8.5 2.8"/></svg></span> Where they fail</div>
+      </div>
+      <div class="mod">
+        <div class="t">2. Working with text <small>6/6</small></div>
+        <div class="les"><span class="tick done"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 5.2l2.3 2.3L8.5 2.8"/></svg></span> Summarising field reports</div>
+        <div class="les"><span class="tick done"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 5.2l2.3 2.3L8.5 2.8"/></svg></span> Checking a summary you didn't write</div>
+      </div>
+      <div class="mod">
+        <div class="t">3. Data collection <small>3/7</small></div>
+        <div class="les"><span class="tick done"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 5.2l2.3 2.3L8.5 2.8"/></svg></span> Framing the task</div>
+        <div class="les active"><span class="tick"></span> Designing prompts for field data · 12 min</div>
+        <div class="les"><span class="tick"></span> Handling missing responses</div>
+        <div class="les"><span class="tick"></span> Practice: rebuild a survey codebook</div>
+      </div>
+      <div class="mod">
+        <div class="t">4. Capstone <small>0/5</small></div>
+        <div class="les"><span class="tick"></span> Brief and rubric</div>
+        <div class="les"><span class="tick"></span> Peer review</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="stage">
+        <div class="play"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M6 3.5l11 6.5-11 6.5z"/></svg></div>
+        <div class="scrub"><i></i></div>
+      </div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true">Overview</button>
+        <button role="tab" aria-selected="false">Transcript</button>
+        <button role="tab" aria-selected="false">Notes</button>
+        <button role="tab" aria-selected="false">Discussion (14)</button>
+        <button role="tab" aria-selected="false">Downloads</button>
+      </div>
+      <div class="prose">
+        <h3>Designing prompts for field data collection</h3>
+        <p>Enumerators send back messy text: partial answers, mixed languages, notes in the margins. This lesson covers how to write an instruction that turns that into a clean row of data — and how to spot when it has quietly guessed.</p>
+        <ul>
+          <li>Write the output format before you write the instruction</li>
+          <li>Give two worked examples, including one that should fail</li>
+          <li>Ask for a confidence flag on every extracted field</li>
+          <li>Spot-check 10% by hand before you trust the batch</li>
+        </ul>
+        <p style="margin-top:18px"><span class="pill moss">Practice file</span> <span class="pill">Kakuma enumerator notes (CSV, 240 rows)</span></p>
+      </div>
+      <div class="navrow">
+        <button class="btn">← Framing the task</button>
+        <button class="btn primary">Mark complete and continue →</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">Cornerstone is a learning platform by Luthien Advisory · Nairobi</div></footer>
+
+<script>
+const courses = [
+  {t:"Applied AI for Development Programmes",d:"Turn everyday programme documents into decisions you can defend.",tag:"AI & digital",h:"6h 10m",lv:"Intermediate",r:"4.8",n:"1,204",c:"#1F4FD8"},
+  {t:"Monitoring, Evaluation and Data Analysis",d:"Indicator design through to a dashboard your board will read.",tag:"MEL",h:"8h 45m",lv:"Intermediate",r:"4.7",n:"932",c:"#0E7A5F"},
+  {t:"Governance and Board Effectiveness",d:"What a board owes the organisation, and how to run the meeting.",tag:"Governance",h:"3h 20m",lv:"Beginner",r:"4.6",n:"411",c:"#7A4B12"},
+  {t:"Proposal Writing for Institutional Donors",d:"Logframes, budgets and the narrative that holds them together.",tag:"Finance",h:"5h 30m",lv:"Intermediate",r:"4.9",n:"1,780",c:"#2C3852"},
+  {t:"Data Storytelling for Non-Analysts",d:"Choose the chart, cut the clutter, land the point in one slide.",tag:"MEL",h:"2h 50m",lv:"Beginner",r:"4.8",n:"654",c:"#155E75"},
+  {t:"Facilitating Workshops that Decide Things",d:"Agenda design, difficult rooms, and getting to a written outcome.",tag:"Facilitation",h:"4h 05m",lv:"Beginner",r:"4.7",n:"388",c:"#6B21A8"}
+];
+document.getElementById('catgrid').innerHTML = courses.map(c=>`
+  <article class="card ccard">
+    <div class="cover" style="background:${c.c}">
+      <span class="mono">${c.tag}</span>
+      <svg width="34" height="34" viewBox="0 0 28 28" fill="none" opacity=".9"><rect x="1" y="14" width="12" height="6" rx="1.5" fill="#fff" opacity=".8"/><rect x="15" y="14" width="12" height="6" rx="1.5" fill="#fff" opacity=".4"/><rect x="1" y="21" width="26" height="6" rx="1.5" fill="#fff" opacity=".25"/><rect x="8" y="7" width="12" height="6" rx="1.5" fill="#fff"/></svg>
+    </div>
+    <div class="body">
+      <h4>${c.t}</h4>
+      <p>${c.d}</p>
+      <div class="foot"><span class="star">★ ${c.r}</span><span>${c.n} learners</span><span style="margin-left:auto">${c.h} · ${c.lv}</span></div>
+    </div>
+  </article>`).join('');
+
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id===id));
+  document.querySelectorAll('nav.main button').forEach(b=>{
+    b.dataset.view===id ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current');
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.querySelectorAll('nav.main button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>show(b.dataset.goto));
+document.querySelectorAll('.filters .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('.filters .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed','true');
+});
+document.querySelectorAll('.tabs button').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected','false'));
+  t.setAttribute('aria-selected','true');
+});
+document.querySelectorAll('.les').forEach(l=>l.onclick=()=>{
+  document.querySelectorAll('.les').forEach(x=>x.classList.remove('active'));
+  l.classList.add('active');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,759 @@
+/* Student portal — from cla-student.html */
+
+.cla-student {
+  background: var(--wash);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cla-student header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.cla-student .bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 64px;
+}
+
+.cla-student .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cla-student .logo b {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: 23px;
+  letter-spacing: -0.01em;
+}
+
+.cla-student .logo span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -3px;
+}
+
+.cla-student nav.main {
+  display: flex;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.cla-student nav.main a {
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--ink2);
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.cla-student nav.main a:hover {
+  background: var(--wash);
+}
+
+.cla-student nav.main a[aria-current="page"] {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.cla-student .search {
+  flex: 1;
+  max-width: 380px;
+  margin-left: auto;
+  position: relative;
+}
+
+.cla-student .search input {
+  width: 100%;
+  height: 38px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 99px;
+  padding: 0 14px 0 38px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.cla-student .search svg {
+  position: absolute;
+  left: 13px;
+  top: 11px;
+  color: var(--muted);
+}
+
+.cla-student .avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.cla-student .icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: none;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: var(--ink2);
+  position: relative;
+  cursor: pointer;
+}
+
+.cla-student .icon-btn:hover {
+  background: var(--wash);
+}
+
+.cla-student .dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 2px solid #fff;
+}
+
+.cla-student .student-main {
+  flex: 1;
+  padding: 32px 0 72px;
+}
+
+.cla-student .wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.cla-student .eyebrow {
+  color: var(--muted);
+}
+
+.cla-student .sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 38px 0 14px;
+}
+
+.cla-student .sec-head h2 {
+  font-size: 19px;
+  margin: 0;
+}
+
+.cla-student .wall {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cla-student .course-row {
+  display: flex;
+  gap: 3px;
+}
+
+.cla-student .brick {
+  height: 9px;
+  flex: 1;
+  border-radius: 2px;
+  background: var(--line);
+  display: block;
+}
+
+.cla-student .brick.done {
+  background: var(--moss);
+}
+
+.cla-student .brick.now {
+  background: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand-soft);
+}
+
+.cla-student .course-row:nth-child(even) {
+  padding-left: 14px;
+  padding-right: 0;
+}
+
+.cla-student .course-row:nth-child(odd) {
+  padding-right: 14px;
+}
+
+.cla-student .hello {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cla-student .hello h1 {
+  font-size: 34px;
+  margin: 0;
+}
+
+.cla-student .hello .serif {
+  font-style: italic;
+}
+
+.cla-student .streak {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.cla-student .day {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.cla-student .day.hit {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.cla-student .resume {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 0;
+  margin-top: 22px;
+  overflow: hidden;
+}
+
+.cla-student .resume-l {
+  padding: 28px 30px;
+}
+
+.cla-student .resume-r {
+  background: var(--ink);
+  color: #fff;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cla-student .resume h3 {
+  font-size: 24px;
+  margin: 8px 0 6px;
+}
+
+.cla-student .resume .lesson {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.cla-student .meter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cla-student .meter b {
+  font-size: 30px;
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.cla-student .resume-r .mono {
+  color: #8fa3c9;
+}
+
+.cla-student .resume-r h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.cla-student .resume-r .brick {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.cla-student .resume-r .brick.done {
+  background: #5fd3ae;
+}
+
+.cla-student .grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.cla-student .stat {
+  padding: 18px 20px;
+}
+
+.cla-student .stat b {
+  display: block;
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  margin-top: 6px;
+}
+
+.cla-student .stat small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cla-student .split {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.cla-student .clist {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cla-student .crow {
+  display: flex;
+  gap: 18px;
+  padding: 18px 20px;
+  align-items: center;
+}
+
+.cla-student .thumb {
+  width: 88px;
+  height: 66px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: var(--brand-soft);
+  display: grid;
+  place-items: center;
+  color: var(--brand);
+}
+
+.cla-student .thumb.b {
+  background: var(--moss-soft);
+  color: var(--moss);
+}
+
+.cla-student .thumb.c {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.cla-student .crow .meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.cla-student .crow h4 {
+  font-size: 16px;
+  margin: 0 0 3px;
+}
+
+.cla-student .crow .sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.cla-student .side .cla-card {
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+.cla-student .due {
+  display: flex;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cla-student .due:last-child {
+  border: 0;
+  padding-bottom: 0;
+}
+
+.cla-student .due .when {
+  width: 42px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.cla-student .due .when b {
+  display: block;
+  font-size: 16px;
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+}
+
+.cla-student .due .when small {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cla-student .due p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cla-student .due span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.cla-student .cert {
+  background: linear-gradient(150deg, #101828, #1e2b47);
+  color: #fff;
+  border: 0;
+}
+
+.cla-student .cert h4 {
+  font-size: 17px;
+  margin: 10px 0 4px;
+}
+
+.cla-student .cert p {
+  color: #a9b6d0;
+  font-size: 13px;
+  margin: 0 0 14px;
+}
+
+.cla-student .cert .cla-btn {
+  background: #fff;
+  border-color: #fff;
+  width: 100%;
+  text-align: center;
+}
+
+.cla-student footer {
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  padding: 26px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Catalog view */
+.cla-student .cat-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: end;
+}
+
+.cla-student .cat-head h1 {
+  font-size: 34px;
+  margin: 0;
+}
+
+.cla-student .filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 22px 0 6px;
+}
+
+.cla-student .student-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.cla-student .ccard {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cla-student .ccard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -14px rgba(14, 20, 32, 0.28);
+}
+
+.cla-student .cover {
+  height: 132px;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.cla-student .cover .mono {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cla-student .ccard .body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cla-student .ccard h4 {
+  font-size: 16.5px;
+  line-height: 1.3;
+  margin: 0 0 6px;
+}
+
+.cla-student .ccard p {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 0 0 14px;
+}
+
+.cla-student .ccard .foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.cla-student .star {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* Course player */
+.cla-student .player {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.cla-student .outline {
+  padding: 6px 0;
+  position: sticky;
+  top: 88px;
+}
+
+.cla-student .outline .mod {
+  border-bottom: 1px solid var(--line);
+}
+
+.cla-student .outline .mod:last-child {
+  border: 0;
+}
+
+.cla-student .mod > .t {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cla-student .mod .t small {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.cla-student .les {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 18px;
+  font-size: 13.5px;
+  color: var(--ink2);
+  cursor: pointer;
+}
+
+.cla-student .les:hover {
+  background: var(--wash);
+}
+
+.cla-student .les.active {
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 500;
+  box-shadow: inset 3px 0 0 var(--brand);
+}
+
+.cla-student .tick {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.cla-student .tick.done {
+  background: var(--moss);
+  border-color: var(--moss);
+  color: #fff;
+}
+
+.cla-student .stage {
+  aspect-ratio: 16 / 9;
+  background: #0b0f18;
+  border-radius: var(--r);
+  display: grid;
+  place-items: center;
+  color: #4e5d7c;
+  position: relative;
+  overflow: hidden;
+}
+
+.cla-student .stage .play {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.cla-student .scrub {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cla-student .scrub i {
+  display: block;
+  height: 100%;
+  width: 38%;
+  background: var(--brand);
+}
+
+.cla-student .tabs {
+  display: flex;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  margin: 22px 0 18px;
+}
+
+.cla-student .tabs button {
+  background: none;
+  border: 0;
+  padding: 0 0 11px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.cla-student .tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.cla-student .prose {
+  max-width: 62ch;
+  font-size: 15px;
+  color: var(--ink2);
+}
+
+.cla-student .prose h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+
+.cla-student .prose ul {
+  padding-left: 18px;
+}
+
+.cla-student .prose li {
+  margin: 6px 0;
+}
+
+.cla-student .navrow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 26px;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .cla-student .resume {
+    grid-template-columns: 1fr;
+  }
+  .cla-student .split,
+  .cla-student .player {
+    grid-template-columns: 1fr;
+  }
+  .cla-student .student-grid,
+  .cla-student .grid3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cla-student .outline {
+    position: static;
+  }
+  .cla-student .search {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .cla-student .student-grid,
+  .cla-student .grid3 {
+    grid-template-columns: 1fr;
+  }
+  .cla-student nav.main {
+    overflow: auto;
+  }
+  .cla-student .hello h1 {
+    font-size: 27px;
+  }
+}
