@@ -1,4 +1,12 @@
-import { isSupabaseConfigured, getSupabaseUrl } from "@/lib/supabase/config";
+import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/config";
+
+function supabaseHost(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "invalid_url";
+  }
+}
 
 export async function GET() {
   if (!isSupabaseConfigured()) {
@@ -11,23 +19,40 @@ export async function GET() {
   }
 
   const url = getSupabaseUrl();
+  const host = supabaseHost(url);
+
+  if (host.includes("YOUR_PROJECT") || host.includes("placeholder") || host === "invalid_url") {
+    return Response.json({
+      ok: false,
+      configured: false,
+      reason: "placeholder_url",
+      host,
+      hint: "Replace YOUR_PROJECT with your real Supabase project ref from Settings → API.",
+    });
+  }
+
   try {
-    const res = await fetch(`${url}/auth/v1/health`, {
-      headers: { Accept: "application/json" },
+    const res = await fetch(`${url}/rest/v1/`, {
+      headers: {
+        Accept: "application/json",
+        apikey: getSupabaseAnonKey(),
+      },
       cache: "no-store",
     });
     return Response.json({
-      ok: res.ok,
+      ok: res.ok || res.status === 401 || res.status === 404,
       configured: true,
       status: res.status,
-      url: url.replace(/https:\/\//, ""),
+      host,
+      hint: res.ok ? undefined : "Supabase responded but returned an unexpected status. Check the anon key.",
     });
   } catch {
     return Response.json({
       ok: false,
       configured: true,
       reason: "network_error",
-      hint: "Supabase URL is set but unreachable. Check the project ref and that the project is not paused.",
+      host,
+      hint: `Cannot reach ${host}. Create a Supabase project or fix the project ref in Render → Environment → SUPABASE_URL.`,
     });
   }
 }
