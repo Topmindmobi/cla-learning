@@ -87,7 +87,7 @@ async function main() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      message: "Initial deploy — CLA Learning Next.js app",
+      message: process.env.COMMIT_MESSAGE || `Deploy — public pages, catalog seed, link fixes (${new Date().toISOString().slice(0, 10)})`,
       tree: tree.sha,
       ...(parentSha ? { parents: [parentSha] } : {}),
     }),

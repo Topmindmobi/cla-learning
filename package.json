@@ -14,7 +14,9 @@
     "setup:render": "node scripts/setup-render.mjs",
     "package:deploy": "node scripts/package-deploy.mjs",
     "push:github": "node scripts/push-github.mjs",
-    "verify:supabase": "node scripts/verify-supabase.mjs"
+    "verify:supabase": "node scripts/verify-supabase.mjs",
+    "import:courses": "node scripts/import-courses.mjs",
+    "test:links": "node scripts/test-links.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

@@ -4,9 +4,9 @@ import { ClaLogo, CheckIcon } from "@/components/brand/ClaLogo";
 const navLinks = [
   { href: "/#programmes", label: "Programmes" },
   { href: "/catalog", label: "Courses" },
-  { href: "/#about", label: "About" },
+  { href: "/about", label: "About" },
   { href: "/#why", label: "Why CLA" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function PublicHeader() {
@@ -31,7 +31,7 @@ export default function PublicHeader() {
           <Link href="/login" className="cla-btn">
             Sign in
           </Link>
-          <Link href="/#contact" className="cla-btn primary">
+          <Link href="/register" className="cla-btn primary">
             Enrol now
           </Link>
         </div>

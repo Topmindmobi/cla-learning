@@ -2,6 +2,7 @@ export type UserRole = "user" | "admin" | "super_admin" | "finance" | "instructo
 
 export type Course = {
   id: string;
+  slug: string | null;
   title: string;
   subtitle: string | null;
   short_description: string | null;

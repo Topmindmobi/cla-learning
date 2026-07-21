@@ -1,16 +1,7 @@
 import Link from "next/link";
-import { ClaLogo, CheckIcon } from "@/components/brand/ClaLogo";
-
-const FEATURED_COURSES = [
-  { t: "CIPS Level 4 Diploma in Procurement and Supply", d: "The level most working professionals join. Eight modules, twelve months.", tag: "CIPS · Level 4", h: "12 months", r: "4.9", p: "RWF 20,000", c: "#1F4FD8" },
-  { t: "ACCA Applied Knowledge", d: "Business, management accounting and financial accounting foundations.", tag: "ACCA · Entry", h: "6 months", r: "4.8", p: "RWF 20,000", c: "#0E7A5F" },
-  { t: "CIPS Level 6 Professional Diploma", d: "Strategic supply chain leadership — the final step to MCIPS.", tag: "CIPS · Level 6", h: "14 months", r: "4.9", p: "RWF 20,000", c: "#2C3852" },
-  { t: "Project Management Professional (PMP) Prep", d: "Exam-focused preparation with full mock sittings and study groups.", tag: "Professional", h: "10 weeks", r: "4.7", p: "RWF 20,000", c: "#7A4B12" },
-  { t: "ACCA Strategic Professional", d: "Advanced reporting, risk and leadership for senior finance roles.", tag: "ACCA · Advanced", h: "9 months", r: "4.8", p: "RWF 20,000", c: "#155E75" },
-  { t: "CIPS Level 3 Advanced Certificate", d: "Contract administration, sourcing and supplier relationships.", tag: "CIPS · Level 3", h: "10 months", r: "4.7", p: "RWF 20,000", c: "#1F4FD8" },
-  { t: "IAS/IFRS Financial Reporting Standards", d: "Apply current standards to real statements, with worked examples.", tag: "Short course", h: "6 weeks", r: "4.8", p: "RWF 20,000", c: "#6B21A8" },
-  { t: "Strategic Management & Leadership", d: "Set direction, build a team and carry a decision through the organisation.", tag: "Leadership", h: "8 weeks", r: "4.6", p: "RWF 20,000", c: "#0E1420" },
-];
+import { CheckIcon } from "@/components/brand/ClaLogo";
+import { FeaturedCourseCard } from "@/components/catalog/CourseCatalogGrid";
+import { HOME_FEATURED_COURSES } from "@/lib/featured-courses";
 
 const CATEGORIES = [
   { count: "14", label: "Procurement & supply", sub: "CIPS Levels 2–6", pill: "brand" },
@@ -162,18 +153,8 @@ export default function HomePage() {
             <Link className="cla-link" href="/catalog">View all 50 courses →</Link>
           </div>
           <div className="grid">
-            {FEATURED_COURSES.map((c) => (
-              <Link key={c.t} href="/catalog" className="ccard">
-                <div className="cover" style={{ background: c.c }}>
-                  <span className="mono">{c.tag}</span>
-                  <ClaLogo size={30} />
-                </div>
-                <div className="body">
-                  <h4>{c.t}</h4>
-                  <p>{c.d}</p>
-                  <div className="foot"><span className="star">★ {c.r}</span><span>{c.h}</span><span className="price">{c.p}</span></div>
-                </div>
-              </Link>
+            {HOME_FEATURED_COURSES.map((c) => (
+              <FeaturedCourseCard key={c.id} course={c} />
             ))}
           </div>
         </div>

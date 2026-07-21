@@ -1,24 +1,14 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import type { Course } from "@/types/database";
+import { FeaturedCourseCard, SupabaseCourseCard } from "@/components/catalog/CourseCatalogGrid";
+import { getCatalogCourses } from "@/lib/catalog-courses";
 
-async function getCourses(): Promise<Course[]> {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("courses")
-      .select("id, title, short_description, category, price, currency, average_rating")
-      .eq("is_published", true)
-      .order("title");
-    return (data as Course[]) ?? [];
-  } catch {
-    return [];
-  }
-}
-
-export default async function CatalogPage() {
-  const courses = await getCourses();
+export default async function CatalogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const courses = await getCatalogCourses(q);
 
   return (
     <section style={{ paddingTop: 48, paddingBottom: 78 }}>
@@ -29,31 +19,30 @@ export default async function CatalogPage() {
           <p>Browse professional courses in procurement, finance, and leadership.</p>
         </div>
 
+        <form className="finder catalog-finder" action="/catalog" method="get" style={{ marginBottom: 28 }}>
+          <input
+            name="q"
+            defaultValue={q ?? ""}
+            placeholder="Search CIPS, ACCA, PMP, short courses…"
+            aria-label="Search courses"
+          />
+          <button type="submit" className="cla-btn primary">Search</button>
+        </form>
+
         {courses.length === 0 ? (
           <div className="cla-card" style={{ padding: 48, textAlign: "center", color: "var(--muted)" }}>
-            <p>No courses in Supabase yet.</p>
-            <p style={{ marginTop: 8, fontSize: 14 }}>Featured courses appear on the home page until data is imported.</p>
-            <Link href="/" className="cla-btn primary" style={{ marginTop: 20 }}>Back to home</Link>
+            <p>No courses match &ldquo;{q}&rdquo;.</p>
+            <Link href="/catalog" className="cla-btn primary" style={{ marginTop: 20 }}>Clear search</Link>
           </div>
         ) : (
           <div className="grid">
-            {courses.map((course) => (
-              <Link key={course.id} href={`/courses/${course.id}`} className="ccard">
-                <div className="cover" style={{ background: "var(--brand)" }}>
-                  <span className="mono">{course.category.replace(/_/g, " · ")}</span>
-                </div>
-                <div className="body">
-                  <h4>{course.title}</h4>
-                  {course.short_description && <p>{course.short_description}</p>}
-                  <div className="foot">
-                    <span className="star">★ {course.average_rating || "—"}</span>
-                    <span className="price">
-                      {course.price > 0 ? `${course.currency} ${course.price.toLocaleString()}` : "Free"}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+            {courses.map((item) =>
+              item.source === "featured" ? (
+                <FeaturedCourseCard key={item.course.id} course={item.course} />
+              ) : (
+                <SupabaseCourseCard key={item.course.id} course={item.course} />
+              )
+            )}
           </div>
         )}
       </div>
