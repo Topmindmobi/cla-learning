@@ -5,8 +5,8 @@ import { getSessionProfile, homePathForRole } from "@/lib/auth";
 const navLinks = [
   { href: "/#programmes", label: "Programmes" },
   { href: "/catalog", label: "Courses" },
+  { href: "/certifications", label: "Certifications" },
   { href: "/about", label: "About" },
-  { href: "/#why", label: "Why CLA" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -82,6 +82,8 @@ export function PublicFooter() {
             <h5>Platform</h5>
             <ul>
               <li><Link href="/catalog">Browse courses</Link></li>
+              <li><Link href="/certifications">Certifications</Link></li>
+              <li><Link href="/help">Help centre</Link></li>
               <li><Link href="/dashboard">My learning</Link></li>
               <li><Link href="/login">Sign in</Link></li>
             </ul>

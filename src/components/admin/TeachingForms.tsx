@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import {
   addBankQuestion,
+  addLmsActivity,
   addLmsChapter,
   addLmsLesson,
   addLmsModule,
@@ -13,6 +14,8 @@ import {
   gradeAssignment,
   importLmsStructure,
   setLmsCourseStatus,
+  toggleLmsActivityPublished,
+  toggleLmsLessonPublished,
   toggleQuizPublished,
 } from "@/app/(admin)/admin/teaching-actions";
 import {
@@ -106,11 +109,22 @@ export function ImportLmsJsonForm() {
 export function AddLmsModuleForm({ courseId }: { courseId: string }) {
   const [state, action, pending] = useActionState(addLmsModule, initial);
   return (
-    <form action={action} style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+    <form action={action} style={{ display: "grid", gap: 8 }}>
       <input type="hidden" name="course_id" value={courseId} />
-      <input name="code" required placeholder="Code" style={inputStyle} />
-      <input name="title" required placeholder="Module title" style={{ ...inputStyle, width: 200 }} />
-      <button type="submit" className="cla-btn sm" disabled={pending}>{pending ? "…" : "Add module"}</button>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+        <input name="code" required placeholder="Code e.g. L5M1" style={inputStyle} />
+        <input name="title" required placeholder="Module title" style={{ ...inputStyle, width: 200 }} />
+        <select name="module_type" defaultValue="core" style={inputStyle}>
+          <option value="core">Core</option>
+          <option value="elective">Elective</option>
+        </select>
+        <input name="credits" type="number" step="0.5" placeholder="Credits" style={{ ...inputStyle, width: 90 }} />
+        <label style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+          <input type="checkbox" name="is_published" /> Publish
+        </label>
+        <button type="submit" className="cla-btn sm" disabled={pending}>{pending ? "…" : "Add module"}</button>
+      </div>
+      <textarea name="overview" placeholder="Module overview (optional)" style={areaStyle} />
       <Feedback state={state} />
     </form>
   );
@@ -125,17 +139,20 @@ export function AddLmsChapterForm({
 }) {
   const [state, action, pending] = useActionState(addLmsChapter, initial);
   return (
-    <form action={action} style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+    <form action={action} style={{ display: "grid", gap: 8 }}>
       <input type="hidden" name="course_id" value={courseId} />
-      <select name="module_id" required style={inputStyle}>
-        <option value="">Module</option>
-        {modules.map((m) => (
-          <option key={m.id} value={m.id}>{m.code} — {m.title}</option>
-        ))}
-      </select>
-      <input name="code" required placeholder="Code" style={inputStyle} />
-      <input name="title" required placeholder="Chapter title" style={{ ...inputStyle, width: 180 }} />
-      <button type="submit" className="cla-btn sm" disabled={pending}>{pending ? "…" : "Add chapter"}</button>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+        <select name="module_id" required style={inputStyle}>
+          <option value="">Module</option>
+          {modules.map((m) => (
+            <option key={m.id} value={m.id}>{m.code} — {m.title}</option>
+          ))}
+        </select>
+        <input name="code" required placeholder="Code e.g. 5M1.1" style={inputStyle} />
+        <input name="title" required placeholder="Chapter title" style={{ ...inputStyle, width: 180 }} />
+        <button type="submit" className="cla-btn sm" disabled={pending}>{pending ? "…" : "Add chapter"}</button>
+      </div>
+      <textarea name="learning_outcome" placeholder="Learning outcome (optional)" style={areaStyle} />
       <Feedback state={state} />
     </form>
   );
@@ -150,27 +167,130 @@ export function AddLmsLessonForm({
 }) {
   const [state, action, pending] = useActionState(addLmsLesson, initial);
   return (
-    <form action={action} style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+    <form action={action} style={{ display: "grid", gap: 8 }}>
       <input type="hidden" name="course_id" value={courseId} />
-      <select name="chapter_pick" required style={inputStyle}>
-        <option value="">Chapter</option>
-        {chapters.map((c) => (
-          <option key={c.id} value={`${c.module_id}|${c.id}`}>
-            {c.code} — {c.title}
-          </option>
-        ))}
-      </select>
-      <input name="code" required placeholder="Code" style={inputStyle} />
-      <input name="title" required placeholder="Lesson title" style={{ ...inputStyle, width: 180 }} />
-      <select name="lesson_type" defaultValue="concept" style={inputStyle}>
-        <option value="concept">Concept</option>
-        <option value="applied_exercise">Exercise</option>
-        <option value="case_study">Case study</option>
-        <option value="reading">Reading</option>
-        <option value="video">Video</option>
-      </select>
-      <button type="submit" className="cla-btn sm" disabled={pending}>
-        {pending ? "…" : "Add lesson"}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+        <select name="chapter_pick" required style={inputStyle}>
+          <option value="">Chapter</option>
+          {chapters.map((c) => (
+            <option key={c.id} value={`${c.module_id}|${c.id}`}>
+              {c.code} — {c.title}
+            </option>
+          ))}
+        </select>
+        <input name="code" required placeholder="Code" style={inputStyle} />
+        <input name="title" required placeholder="Lesson title" style={{ ...inputStyle, width: 180 }} />
+        <select name="lesson_type" defaultValue="concept" style={inputStyle}>
+          <option value="concept">Concept</option>
+          <option value="applied_exercise">Exercise</option>
+          <option value="case_study">Case study</option>
+          <option value="reading">Reading</option>
+          <option value="video">Video</option>
+        </select>
+        <label style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+          <input type="checkbox" name="is_published" /> Publish
+        </label>
+        <button type="submit" className="cla-btn sm" disabled={pending}>
+          {pending ? "…" : "Add lesson"}
+        </button>
+      </div>
+      <textarea name="learning_objectives" placeholder="Learning objectives (one per line)" style={areaStyle} />
+      <textarea name="introduction" placeholder="Introduction" style={areaStyle} />
+      <textarea name="key_notes" placeholder="Key notes" style={areaStyle} />
+      <Feedback state={state} />
+    </form>
+  );
+}
+
+export function AddLmsActivityForm({
+  courseId,
+  lessons,
+}: {
+  courseId: string;
+  lessons: { id: string; code: string; title: string }[];
+}) {
+  const [state, action, pending] = useActionState(addLmsActivity, initial);
+  return (
+    <form action={action} style={{ display: "grid", gap: 8 }}>
+      <input type="hidden" name="course_id" value={courseId} />
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-end" }}>
+        <select name="lesson_id" required style={{ ...inputStyle, minWidth: 200 }}>
+          <option value="">Lesson</option>
+          {lessons.map((l) => (
+            <option key={l.id} value={l.id}>{l.code} — {l.title}</option>
+          ))}
+        </select>
+        <input name="title" required placeholder="Activity title" style={{ ...inputStyle, width: 200 }} />
+        <select name="activity_type" defaultValue="content" style={inputStyle}>
+          <option value="content">Reading / content</option>
+          <option value="video">Video</option>
+          <option value="quiz">Quiz</option>
+          <option value="assignment">Assignment</option>
+          <option value="discussion">Discussion</option>
+        </select>
+        <label style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+          <input type="checkbox" name="is_published" /> Publish
+        </label>
+        <button type="submit" className="cla-btn sm primary" disabled={pending}>
+          {pending ? "…" : "Add activity"}
+        </button>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <input name="module_code" placeholder="CIPS module e.g. L5M1" style={inputStyle} />
+        <input name="lo_code" placeholder="LO code" style={inputStyle} />
+        <input name="ac_code" placeholder="AC code" style={inputStyle} />
+        <input name="estimated_duration_minutes" type="number" placeholder="Minutes" style={{ ...inputStyle, width: 90 }} />
+      </div>
+      <input name="video_url" placeholder="Video URL (YouTube / Vimeo / mp4)" style={{ ...inputStyle, width: "100%" }} />
+      <input name="file_url" placeholder="File / PDF URL" style={{ ...inputStyle, width: "100%" }} />
+      <input name="external_link" placeholder="External link" style={{ ...inputStyle, width: "100%" }} />
+      <textarea name="description" placeholder="Short description" style={areaStyle} />
+      <textarea name="content_html" placeholder="Content HTML / reading text" style={{ ...areaStyle, minHeight: 120 }} />
+      <Feedback state={state} />
+    </form>
+  );
+}
+
+export function ToggleLmsLessonForm({
+  courseId,
+  id,
+  published,
+}: {
+  courseId: string;
+  id: string;
+  published: boolean;
+}) {
+  const [state, action, pending] = useActionState(toggleLmsLessonPublished, initial);
+  return (
+    <form action={action} style={{ display: "inline" }}>
+      <input type="hidden" name="course_id" value={courseId} />
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="is_published" value={published ? "false" : "true"} />
+      <button type="submit" className="cla-btn sm" disabled={pending} style={{ fontSize: 11 }}>
+        {pending ? "…" : published ? "Unpublish" : "Publish"}
+      </button>
+      <Feedback state={state} />
+    </form>
+  );
+}
+
+export function ToggleLmsActivityForm({
+  courseId,
+  id,
+  published,
+}: {
+  courseId: string;
+  id: string;
+  published: boolean;
+}) {
+  const [state, action, pending] = useActionState(toggleLmsActivityPublished, initial);
+  return (
+    <form action={action} style={{ display: "inline" }}>
+      <input type="hidden" name="course_id" value={courseId} />
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="is_published" value={published ? "false" : "true"} />
+      <button type="submit" className="cla-btn sm" disabled={pending} style={{ fontSize: 11 }}>
+        {pending ? "…" : published ? "Unpublish" : "Publish"}
       </button>
       <Feedback state={state} />
     </form>

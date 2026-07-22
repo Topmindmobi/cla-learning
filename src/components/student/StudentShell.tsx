@@ -8,7 +8,34 @@ import AccountMenu from "@/components/auth/AccountMenu";
 const NAV = [
   { href: "/dashboard", label: "Dashboard", match: (p: string) => p === "/dashboard" },
   { href: "/dashboard/catalog", label: "Catalog", match: (p: string) => p.startsWith("/dashboard/catalog") },
-  { href: "/dashboard/course", label: "My course", match: (p: string) => p.startsWith("/dashboard/course") },
+  {
+    href: "/dashboard/course",
+    label: "My learning",
+    match: (p: string) => p.startsWith("/dashboard/course") || p.startsWith("/dashboard/learn"),
+  },
+  {
+    href: "/dashboard/quizzes",
+    label: "Quizzes",
+    match: (p: string) => p.startsWith("/dashboard/quizzes"),
+  },
+  {
+    href: "/dashboard/schedule",
+    label: "Schedule",
+    match: (p: string) => p.startsWith("/dashboard/schedule"),
+  },
+  {
+    href: "/dashboard/more",
+    label: "More",
+    match: (p: string) =>
+      p.startsWith("/dashboard/more") ||
+      p.startsWith("/dashboard/grades") ||
+      p.startsWith("/dashboard/assignments") ||
+      p.startsWith("/dashboard/billing") ||
+      p.startsWith("/dashboard/certificates") ||
+      p.startsWith("/dashboard/notifications") ||
+      p.startsWith("/dashboard/analytics") ||
+      p.startsWith("/dashboard/library"),
+  },
 ];
 
 export default function StudentShell({

@@ -43,6 +43,28 @@ export type LmsLessonRow = {
   lesson_type: string;
   sort_order: number;
   is_published: boolean;
+  learning_objectives?: string[] | null;
+  introduction?: string | null;
+  key_notes?: string | null;
+};
+
+export type LmsActivityRow = {
+  id: string;
+  lesson_id: string;
+  title: string;
+  activity_type: string;
+  description: string | null;
+  content_html: string | null;
+  video_url: string | null;
+  file_url?: string | null;
+  external_link?: string | null;
+  module_code?: string | null;
+  lo_code?: string | null;
+  ac_code?: string | null;
+  estimated_duration_minutes?: number | null;
+  is_required?: boolean;
+  sort_order: number;
+  is_published: boolean;
 };
 
 export async function listLmsCourses(): Promise<LmsCourseRow[]> {
@@ -97,11 +119,23 @@ export async function getLmsCourseTree(courseId: string) {
     .eq("course_id", courseId)
     .order("sort_order");
 
+  const lessonIds = (lessons ?? []).map((l) => l.id as string);
+  let activities: LmsActivityRow[] = [];
+  if (lessonIds.length) {
+    const { data: acts } = await supabase
+      .from("lms_activities")
+      .select("*")
+      .in("lesson_id", lessonIds)
+      .order("sort_order");
+    activities = (acts ?? []) as LmsActivityRow[];
+  }
+
   return {
     course: course as LmsCourseRow & Record<string, unknown>,
     modules: (modules ?? []) as LmsModuleRow[],
     chapters: (chapters ?? []) as LmsChapterRow[],
     lessons: (lessons ?? []) as LmsLessonRow[],
+    activities,
   };
 }
 

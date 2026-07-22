@@ -12,7 +12,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const out = join(dirname(root), "cla-learning-deploy.zip");
 
 execSync(
-  `zip -r "${out}" . -x "node_modules/*" -x ".next/*" -x ".git/*" -x "*.zip"`,
+  `zip -r "${out}" . -x "node_modules/*" -x ".next/*" -x ".git/*" -x "*.zip" -x ".env" -x ".env.local" -x "*.tsbuildinfo" -x "scripts/data/*"`,
   { cwd: root, stdio: "inherit" },
 );
 

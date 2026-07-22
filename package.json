@@ -7,8 +7,9 @@
   },
   "scripts": {
     "dev": "next dev",
+    "replit": "next dev --hostname 0.0.0.0 --port ${PORT:-3000}",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --hostname 0.0.0.0 --port ${PORT:-3000}",
     "lint": "eslint",
     "setup:cloud": "node scripts/setup-cloud.mjs",
     "setup:render": "node scripts/setup-render.mjs",

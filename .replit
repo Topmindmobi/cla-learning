@@ -1,0 +1,17 @@
+# Replit hosting for CLA Learning (Next.js)
+# Docs: set Secrets for NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+
+run = "npm run replit"
+entrypoint = "src/app/layout.tsx"
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["npm", "run", "start"]
+build = ["npm", "run", "build"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80

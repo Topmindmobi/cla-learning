@@ -174,7 +174,10 @@ export async function addLmsModule(
       code,
       title,
       overview: String(formData.get("overview") ?? "") || null,
+      module_type: String(formData.get("module_type") ?? "core") || "core",
+      credits: Number(formData.get("credits") ?? 0) || null,
       sort_order: count ?? 0,
+      is_published: formData.get("is_published") === "on",
     });
     if (error) return { error: error.message };
     revalidateTeaching(`/admin/lms/${course_id}`);
@@ -241,6 +244,10 @@ export async function addLmsLesson(
       .from("lms_lessons")
       .select("id", { count: "exact", head: true })
       .eq("chapter_id", chapter_id);
+    const objectivesRaw = String(formData.get("learning_objectives") ?? "").trim();
+    const learning_objectives = objectivesRaw
+      ? objectivesRaw.split("\n").map((s) => s.trim()).filter(Boolean)
+      : [];
     const { error } = await supabase.from("lms_lessons").insert({
       course_id,
       module_id,
@@ -248,14 +255,101 @@ export async function addLmsLesson(
       code,
       title,
       lesson_type: String(formData.get("lesson_type") ?? "concept"),
+      learning_objectives,
+      introduction: String(formData.get("introduction") ?? "") || null,
+      key_notes: String(formData.get("key_notes") ?? "") || null,
       sort_order: count ?? 0,
-      is_published: false,
+      is_published: formData.get("is_published") === "on",
     });
     if (error) return { error: error.message };
     revalidateTeaching(`/admin/lms/${course_id}`);
     return { message: "Lesson added." };
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Could not add lesson." };
+  }
+}
+
+export async function addLmsActivity(
+  _prev: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  try {
+    await requireAdmin();
+    const course_id = String(formData.get("course_id") ?? "");
+    const lesson_id = String(formData.get("lesson_id") ?? "");
+    const title = String(formData.get("title") ?? "").trim();
+    if (!course_id || !lesson_id || !title) return { error: "Lesson and title required." };
+
+    const supabase = createAdminClient();
+    const { count } = await supabase
+      .from("lms_activities")
+      .select("id", { count: "exact", head: true })
+      .eq("lesson_id", lesson_id);
+
+    const activity_type = String(formData.get("activity_type") ?? "content");
+    const allowed = new Set(["content", "video", "quiz", "assignment", "discussion"]);
+    const { error } = await supabase.from("lms_activities").insert({
+      lesson_id,
+      title,
+      activity_type: allowed.has(activity_type) ? activity_type : "content",
+      description: String(formData.get("description") ?? "") || null,
+      content_html: String(formData.get("content_html") ?? "") || null,
+      video_url: String(formData.get("video_url") ?? "") || null,
+      file_url: String(formData.get("file_url") ?? "") || null,
+      external_link: String(formData.get("external_link") ?? "") || null,
+      module_code: String(formData.get("module_code") ?? "") || null,
+      lo_code: String(formData.get("lo_code") ?? "") || null,
+      ac_code: String(formData.get("ac_code") ?? "") || null,
+      estimated_duration_minutes: Number(formData.get("estimated_duration_minutes") ?? 0) || null,
+      is_required: formData.get("is_required") !== "off",
+      sort_order: count ?? 0,
+      is_published: formData.get("is_published") === "on",
+    });
+    if (error) return { error: error.message };
+    revalidateTeaching(`/admin/lms/${course_id}`);
+    return { message: "Activity added." };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Could not add activity." };
+  }
+}
+
+export async function toggleLmsLessonPublished(
+  _prev: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  try {
+    await requireAdmin();
+    const course_id = String(formData.get("course_id") ?? "");
+    const id = String(formData.get("id") ?? "");
+    const is_published = formData.get("is_published") === "true";
+    if (!id || !course_id) return { error: "Missing lesson." };
+    const supabase = createAdminClient();
+    const { error } = await supabase.from("lms_lessons").update({ is_published }).eq("id", id);
+    if (error) return { error: error.message };
+    revalidateTeaching(`/admin/lms/${course_id}`);
+    return { message: is_published ? "Lesson published." : "Lesson unpublished." };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Could not update lesson." };
+  }
+}
+
+export async function toggleLmsActivityPublished(
+  _prev: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  try {
+    await requireAdmin();
+    const course_id = String(formData.get("course_id") ?? "");
+    const id = String(formData.get("id") ?? "");
+    const is_published = formData.get("is_published") === "true";
+    if (!id || !course_id) return { error: "Missing activity." };
+    const supabase = createAdminClient();
+    const { error } = await supabase.from("lms_activities").update({ is_published }).eq("id", id);
+    if (error) return { error: error.message };
+    revalidateTeaching(`/admin/lms/${course_id}`);
+    return { message: is_published ? "Activity published." : "Activity unpublished." };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Could not update activity." };
   }
 }
 

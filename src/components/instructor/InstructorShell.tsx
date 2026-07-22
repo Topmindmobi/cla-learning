@@ -15,23 +15,19 @@ const INSTRUCTOR_NAV: NavGroup[] = [
     items: [
       { href: "/instructor/timetable", label: "My timetable" },
       { href: "/instructor/sessions", label: "Live sessions" },
-      { href: "/instructor/materials", label: "Lesson materials" },
     ],
   },
   {
     label: "Assessment",
     items: [
-      { href: "/instructor/marking", label: "Marking", badge: "23", warn: true },
-      { href: "/instructor/questions", label: "Question bank" },
-      { href: "/instructor/mocks", label: "Mock results" },
+      { href: "/instructor/marking", label: "Marking" },
     ],
   },
   {
     label: "Students",
     items: [
-      { href: "/instructor/cohorts", label: "My cohorts" },
-      { href: "/instructor/attendance", label: "Attendance register" },
-      { href: "/instructor/messages", label: "Messages", badge: "5", warn: true },
+      { href: "/admin/cohorts", label: "Cohorts" },
+      { href: "/admin/attendance", label: "Attendance" },
     ],
   },
   {
