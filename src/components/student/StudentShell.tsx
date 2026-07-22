@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ClaLogo } from "@/components/brand/ClaLogo";
+import AccountMenu from "@/components/auth/AccountMenu";
 
 const NAV = [
   { href: "/dashboard", label: "Dashboard", match: (p: string) => p === "/dashboard" },
@@ -12,10 +13,20 @@ const NAV = [
 
 export default function StudentShell({
   children,
-  initials = "FK",
+  initials = "CL",
+  name = "Learner",
+  email = "",
+  roleLabel = "Student",
+  homeHref,
+  homeLabel,
 }: {
   children: React.ReactNode;
   initials?: string;
+  name?: string;
+  email?: string;
+  roleLabel?: string;
+  homeHref?: string;
+  homeLabel?: string;
 }) {
   const pathname = usePathname();
 
@@ -55,7 +66,14 @@ export default function StudentShell({
             </svg>
             <i className="dot" />
           </button>
-          <div className="avatar">{initials}</div>
+          <AccountMenu
+            initials={initials}
+            name={name}
+            email={email}
+            roleLabel={roleLabel}
+            homeHref={homeHref}
+            homeLabel={homeLabel}
+          />
         </div>
       </header>
       <div className="student-main">{children}</div>

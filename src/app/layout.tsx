@@ -4,6 +4,7 @@ import "@/styles/tokens.css";
 import "@/styles/public.css";
 import "@/styles/dashboard.css";
 import "@/styles/student.css";
+import "@/styles/account.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });

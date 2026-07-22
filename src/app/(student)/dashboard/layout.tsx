@@ -1,33 +1,36 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/middleware";
+import {
+  initialsFromName,
+  requireSession,
+  roleLabel,
+} from "@/lib/auth";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import StudentShell from "@/components/student/StudentShell";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   if (!isSupabaseConfigured()) {
-    return <StudentShell initials="FK">{children}</StudentShell>;
+    return <StudentShell>{children}</StudentShell>;
   }
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
+  const session = await requireSession();
+  if (session.profile.role === "admin" || session.profile.role === "super_admin" || session.profile.role === "finance") {
+    redirect("/admin");
+  }
+  if (session.profile.role === "instructor") {
+    redirect("/instructor");
   }
 
-  let initials = "FK";
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user.id)
-    .single();
+  const name = session.profile.full_name?.trim() || session.email.split("@")[0] || "Learner";
+  const initials = initialsFromName(session.profile.full_name, session.email);
 
-  if (profile?.full_name) {
-    const parts = profile.full_name.trim().split(/\s+/);
-    initials = parts.length >= 2
-      ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
-      : parts[0].slice(0, 2).toUpperCase();
-  }
-
-  return <StudentShell initials={initials}>{children}</StudentShell>;
+  return (
+    <StudentShell
+      initials={initials}
+      name={name}
+      email={session.email}
+      roleLabel={roleLabel(session.profile.role)}
+    >
+      {children}
+    </StudentShell>
+  );
 }

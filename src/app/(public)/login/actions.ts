@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { effectiveRole, getSessionProfile, homePathForRole } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 export type AuthState = {
@@ -46,5 +47,6 @@ export async function authenticate(
     };
   }
 
-  redirect("/dashboard");
+  const session = await getSessionProfile();
+  redirect(session ? homePathForRole(effectiveRole(session.profile)) : "/dashboard");
 }

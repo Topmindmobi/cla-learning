@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ClaLogoLight } from "@/components/brand/ClaLogo";
+import { signOut } from "@/app/auth/actions";
 
 type NavItem = { href: string; label: string; badge?: string; warn?: boolean };
 type NavGroup = { label?: string; items: NavItem[] };
@@ -33,9 +34,26 @@ const INSTRUCTOR_NAV: NavGroup[] = [
       { href: "/instructor/messages", label: "Messages", badge: "5", warn: true },
     ],
   },
+  {
+    label: "Account",
+    items: [
+      { href: "/account", label: "My profile" },
+      { href: "/account/settings", label: "Settings" },
+    ],
+  },
 ];
 
-export default function InstructorShell({ children }: { children: React.ReactNode }) {
+export default function InstructorShell({
+  children,
+  initials = "CL",
+  name = "Instructor",
+  roleLabel = "Instructor",
+}: {
+  children: React.ReactNode;
+  initials?: string;
+  name?: string;
+  roleLabel?: string;
+}) {
   const pathname = usePathname();
 
   return (
@@ -53,7 +71,7 @@ export default function InstructorShell({ children }: { children: React.ReactNod
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`nav-item${pathname === item.href ? " on" : ""}${item.warn ? " warn" : ""}`}
+                  className={`nav-item${pathname === item.href || (item.href !== "/instructor" && pathname.startsWith(item.href)) ? " on" : ""}${item.warn ? " warn" : ""}`}
                 >
                   {item.label}
                   {item.badge && <span className="badge">{item.badge}</span>}
@@ -62,8 +80,18 @@ export default function InstructorShell({ children }: { children: React.ReactNod
             </div>
           ))}
           <div className="me">
-            <div className="av">AN</div>
-            <div><p>A. Nsengiyumva</p><span>MCIPS · CIPS faculty</span></div>
+            <div className="av">{initials}</div>
+            <div>
+              <p>{name}</p>
+              <span>{roleLabel}</span>
+              <div className="me-actions">
+                <Link href="/account">Profile</Link>
+                <Link href="/account/settings">Settings</Link>
+                <form action={signOut}>
+                  <button type="submit">Log out</button>
+                </form>
+              </div>
+            </div>
           </div>
         </aside>
         <main>{children}</main>

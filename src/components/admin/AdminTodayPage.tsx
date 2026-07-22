@@ -14,7 +14,6 @@ export default function AdminTodayPage() {
         <div className="right">
           <button type="button" className="cla-btn">Export</button>
           <button type="button" className="cla-btn primary">+ Enrol student</button>
-          <div className="avatar">FK</div>
         </div>
       </div>
       <div className="content">

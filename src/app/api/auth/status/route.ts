@@ -32,19 +32,33 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${url}/rest/v1/`, {
+    const key = getSupabaseAnonKey();
+    // Prefer Auth settings — `/rest/v1/` root rejects anon keys on newer projects.
+    const res = await fetch(`${url}/auth/v1/settings`, {
       headers: {
         Accept: "application/json",
-        apikey: getSupabaseAnonKey(),
+        apikey: key,
+        Authorization: `Bearer ${key}`,
       },
       cache: "no-store",
     });
+    let message: string | undefined;
+    try {
+      const body = (await res.json()) as { message?: string; msg?: string; error?: string };
+      message = body.message || body.msg || body.error;
+    } catch {
+      message = undefined;
+    }
     return Response.json({
-      ok: res.ok || res.status === 401 || res.status === 404,
+      ok: res.ok,
       configured: true,
       status: res.status,
       host,
-      hint: res.ok ? undefined : "Supabase responded but returned an unexpected status. Check the anon key.",
+      keyLen: key.length,
+      message: res.ok ? undefined : message,
+      hint: res.ok
+        ? undefined
+        : "Anon key was rejected. Set SUPABASE_ANON_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY from Supabase → Settings → API Keys → Legacy, then redeploy.",
     });
   } catch {
     return Response.json({

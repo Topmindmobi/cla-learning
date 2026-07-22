@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ClaLogoLight } from "@/components/brand/ClaLogo";
+import { signOut } from "@/app/auth/actions";
 
 type NavItem = { href: string; label: string; badge?: string; warn?: boolean };
-
 type NavGroup = { label?: string; items: NavItem[] };
 
 const ADMIN_NAV: NavGroup[] = [
@@ -39,13 +39,25 @@ const ADMIN_NAV: NavGroup[] = [
   {
     label: "Settings",
     items: [
+      { href: "/account", label: "My profile" },
+      { href: "/account/settings", label: "Account settings" },
       { href: "/admin/users", label: "Users & roles" },
       { href: "/admin/content", label: "Site content" },
     ],
   },
 ];
 
-export default function AdminShell({ children }: { children: React.ReactNode }) {
+export default function AdminShell({
+  children,
+  initials = "CL",
+  name = "Admin",
+  roleLabel = "Admin",
+}: {
+  children: React.ReactNode;
+  initials?: string;
+  name?: string;
+  roleLabel?: string;
+}) {
   const pathname = usePathname();
 
   return (
@@ -67,7 +79,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`nav-item${pathname === item.href ? " on" : ""}${item.warn ? " warn" : ""}`}
+                  className={`nav-item${pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href)) ? " on" : ""}${item.warn ? " warn" : ""}`}
                 >
                   {item.label}
                   {item.badge && <span className="badge">{item.badge}</span>}
@@ -75,6 +87,20 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               ))}
             </div>
           ))}
+          <div className="me">
+            <div className="av">{initials}</div>
+            <div>
+              <p>{name}</p>
+              <span>{roleLabel}</span>
+              <div className="me-actions">
+                <Link href="/account">Profile</Link>
+                <Link href="/account/settings">Settings</Link>
+                <form action={signOut}>
+                  <button type="submit">Log out</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </aside>
         <main>{children}</main>
       </div>

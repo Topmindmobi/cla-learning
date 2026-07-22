@@ -12,11 +12,13 @@ export default function LoginPage() {
   return (
     <section style={{ padding: "78px 0" }}>
       <div className="cla-wrap" style={{ maxWidth: 440 }}>
-        <span className="mono eyebrow">Student login</span>
+        <span className="mono eyebrow">Account</span>
         <h1 style={{ fontSize: 32, marginTop: 10 }}>
           {mode === "signin" ? "Sign in" : "Create account"}
         </h1>
-        <p style={{ color: "var(--muted)", marginTop: 8 }}>Access your courses and learning dashboard.</p>
+        <p style={{ color: "var(--muted)", marginTop: 8 }}>
+          Access your dashboard, courses, and account settings.
+        </p>
 
         <form action={formAction} style={{ marginTop: 32, display: "grid", gap: 16 }}>
           <input type="hidden" name="mode" value={mode} />

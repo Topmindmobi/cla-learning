@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ClaLogo, CheckIcon } from "@/components/brand/ClaLogo";
+import { getSessionProfile, homePathForRole } from "@/lib/auth";
 
 const navLinks = [
   { href: "/#programmes", label: "Programmes" },
@@ -9,7 +10,10 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function PublicHeader() {
+export default async function PublicHeader() {
+  const session = await getSessionProfile();
+  const home = session ? homePathForRole(session.profile.role) : "/login";
+
   return (
     <header>
       <div className="cla-wrap bar">
@@ -28,12 +32,25 @@ export default function PublicHeader() {
           ))}
         </nav>
         <div className="right">
-          <Link href="/login" className="cla-btn">
-            Sign in
-          </Link>
-          <Link href="/register" className="cla-btn primary">
-            Enrol now
-          </Link>
+          {session ? (
+            <>
+              <Link href="/account" className="cla-btn">
+                Account
+              </Link>
+              <Link href={home} className="cla-btn primary">
+                {home === "/admin" ? "Admin" : home === "/instructor" ? "Instructor" : "Dashboard"}
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="cla-btn">
+                Sign in
+              </Link>
+              <Link href="/register" className="cla-btn primary">
+                Enrol now
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
@@ -66,7 +83,7 @@ export function PublicFooter() {
             <ul>
               <li><Link href="/catalog">Browse courses</Link></li>
               <li><Link href="/dashboard">My learning</Link></li>
-              <li><Link href="/login">Student login</Link></li>
+              <li><Link href="/login">Sign in</Link></li>
             </ul>
           </div>
           <div>
