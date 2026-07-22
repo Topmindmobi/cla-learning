@@ -1,5 +1,6 @@
 import { AdminTopBar, AdminPageHead, ConfigBanner, EmptyRow } from "@/components/admin/AdminUi";
 import { CreateInvoiceForm } from "@/components/admin/OpsForms";
+import { CreatePaymentPlanForm } from "@/components/admin/TeachingForms";
 import { listCourseOptions, listInvoices, listPaymentPlans } from "@/lib/admin/ops";
 import { isAdminClientConfigured } from "@/lib/supabase/admin";
 
@@ -19,7 +20,7 @@ export default async function AdminInvoicesPage() {
       <div className="content">
         <AdminPageHead
           title="Invoices & plans"
-          lede="Issue invoices and review payment plan records."
+          lede="Issue invoices and define installment plans for programmes."
         />
         <ConfigBanner ok={configured} />
 
@@ -31,6 +32,18 @@ export default async function AdminInvoicesPage() {
             </div>
           </div>
           <CreateInvoiceForm courses={courses} />
+        </section>
+
+        <section className="cla-card panel" style={{ marginBottom: 18 }}>
+          <div className="ph">
+            <div>
+              <h3>Create payment plan</h3>
+              <small>Template for installment billing</small>
+            </div>
+          </div>
+          <div style={{ padding: "0 16px 16px" }}>
+            <CreatePaymentPlanForm courses={courses} />
+          </div>
         </section>
 
         <section className="cla-card panel" style={{ marginBottom: 18 }}>
@@ -78,36 +91,34 @@ export default async function AdminInvoicesPage() {
           <table>
             <thead>
               <tr>
-                <th>Student</th>
+                <th>Name</th>
                 <th>Course</th>
                 <th>Total</th>
+                <th>Installments</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {paymentPlans.length === 0 ? (
-                <EmptyRow cols={4} message="No payment plans yet." />
+                <EmptyRow cols={5} message="No payment plans yet." />
               ) : (
-                paymentPlans.map((row) => {
-                  const plan = row as {
+                paymentPlans.map((plan) => {
+                  const row = plan as {
                     id: string;
-                    student_email?: string;
+                    name?: string;
                     course_title?: string;
                     total_amount?: number;
                     currency?: string;
+                    installment_count?: number;
                     status?: string;
                   };
                   return (
-                    <tr key={plan.id}>
-                      <td>{plan.student_email || "—"}</td>
-                      <td>{plan.course_title || "—"}</td>
-                      <td>
-                        {money(
-                          Number(plan.total_amount ?? 0),
-                          (plan.currency as string) || "RWF",
-                        )}
-                      </td>
-                      <td><span className="cla-pill">{plan.status || "—"}</span></td>
+                    <tr key={row.id}>
+                      <td>{row.name || "—"}</td>
+                      <td>{row.course_title || "—"}</td>
+                      <td>{money(Number(row.total_amount ?? 0), row.currency || "RWF")}</td>
+                      <td>{row.installment_count ?? "—"}</td>
+                      <td><span className="cla-pill">{row.status || "—"}</span></td>
                     </tr>
                   );
                 })

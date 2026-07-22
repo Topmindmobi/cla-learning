@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listAdminCourses } from "@/lib/admin/data";
 import { isAdminClientConfigured } from "@/lib/supabase/admin";
 import { FeatureCourseForm, PublishCourseForm } from "@/components/admin/AdminForms";
+import { AdminPageHead, AdminTopBar, ConfigBanner, EmptyRow } from "@/components/admin/AdminUi";
 
 function money(amount: number, currency: string) {
   return `${currency} ${Number(amount || 0).toLocaleString()}`;
@@ -13,28 +14,29 @@ export default async function AdminCoursesPage() {
 
   return (
     <>
-      <div className="topbar">
-        <div className="crumbs">Admin / <b>Courses</b></div>
-        <div className="right">
-          <Link href="/catalog" className="cla-btn" target="_blank">
-            View catalog
-          </Link>
-        </div>
-      </div>
+      <AdminTopBar
+        section="Courses"
+        title="Courses"
+        actions={
+          <>
+            <Link href="/admin/courses/new" className="cla-btn primary">
+              New course
+            </Link>
+            <Link href="/admin/lms" className="cla-btn">
+              LMS
+            </Link>
+            <Link href="/catalog" className="cla-btn" target="_blank">
+              Catalog
+            </Link>
+          </>
+        }
+      />
       <div className="content">
-        <div className="pagehead">
-          <div>
-            <h1>Courses &amp; syllabus</h1>
-            <p>Publish courses to the public catalog and mark featured programmes.</p>
-          </div>
-        </div>
-
-        {!configured ? (
-          <div className="attention">
-            <b>Service role key missing</b>
-            <span>· Add SUPABASE_SERVICE_ROLE_KEY in Render Environment, then redeploy.</span>
-          </div>
-        ) : null}
+        <AdminPageHead
+          title="Courses"
+          lede="Create and edit catalogue programmes. Use LMS for module/chapter content structure."
+        />
+        <ConfigBanner ok={configured} />
 
         <section className="cla-card panel">
           <div className="ph">
@@ -55,9 +57,7 @@ export default async function AdminCoursesPage() {
             </thead>
             <tbody>
               {courses.length === 0 ? (
-                <tr>
-                  <td colSpan={5} style={{ color: "var(--muted)" }}>No courses found.</td>
-                </tr>
+                <EmptyRow cols={5} message="No courses yet. Create one or run npm run import:courses." />
               ) : (
                 courses.map((course) => (
                   <tr key={course.id}>
@@ -78,19 +78,19 @@ export default async function AdminCoursesPage() {
                           <i className="dotm" /> {course.is_published ? "Published" : "Draft"}
                         </span>
                         {course.is_featured ? (
-                          <span className="cla-pill brand"><i className="dotm" /> Featured</span>
+                          <span className="cla-pill brand">
+                            <i className="dotm" /> Featured
+                          </span>
                         ) : null}
                       </div>
                     </td>
                     <td>
-                      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        <Link href={`/admin/courses/${course.id}/edit`} className="cla-btn sm">
+                          Edit
+                        </Link>
                         <PublishCourseForm courseId={course.id} published={course.is_published} />
                         <FeatureCourseForm courseId={course.id} featured={course.is_featured} />
-                        {course.slug ? (
-                          <Link href={`/courses/${course.slug}`} className="cla-btn sm" target="_blank">
-                            Open
-                          </Link>
-                        ) : null}
                       </div>
                     </td>
                   </tr>

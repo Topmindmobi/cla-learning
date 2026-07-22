@@ -9,13 +9,17 @@ export default async function AdminSessionsPage() {
     ? await Promise.all([listSessions(), listCourseOptions()])
     : [[], []];
 
+  const now = Date.now();
+  const upcoming = sessions.filter((s) => !s.start_at || new Date(s.start_at).getTime() >= now - 3600_000);
+  const past = sessions.filter((s) => s.start_at && new Date(s.start_at).getTime() < now - 3600_000);
+
   return (
     <>
-      <AdminTopBar section="Live sessions" title="Live sessions" />
+      <AdminTopBar section="Timetable" title="Timetable" />
       <div className="content">
         <AdminPageHead
-          title="Live sessions"
-          lede="Schedule and manage live class sessions."
+          title="Timetable"
+          lede="Schedule live sessions. Meeting URL is optional — paste Zoom links manually without Zoom account setup."
         />
         <ConfigBanner ok={configured} />
 
@@ -23,17 +27,17 @@ export default async function AdminSessionsPage() {
           <div className="ph">
             <div>
               <h3>Schedule session</h3>
-              <small>Add a new live class session</small>
+              <small>Title + start time required</small>
             </div>
           </div>
           <CreateSessionForm courses={courses} />
         </section>
 
-        <section className="cla-card panel">
+        <section className="cla-card panel" style={{ marginBottom: 18 }}>
           <div className="ph">
             <div>
-              <h3>Upcoming sessions</h3>
-              <small>{sessions.length} sessions</small>
+              <h3>Upcoming</h3>
+              <small>{upcoming.length}</small>
             </div>
           </div>
           <table>
@@ -41,17 +45,16 @@ export default async function AdminSessionsPage() {
               <tr>
                 <th>Title</th>
                 <th>Course</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Location</th>
+                <th>When</th>
+                <th>Where</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              {sessions.length === 0 ? (
-                <EmptyRow cols={6} message="No sessions scheduled yet." />
+              {upcoming.length === 0 ? (
+                <EmptyRow cols={5} message="No upcoming sessions." />
               ) : (
-                sessions.map((row) => (
+                upcoming.map((row) => (
                   <tr key={row.id}>
                     <td>
                       <div>
@@ -65,8 +68,40 @@ export default async function AdminSessionsPage() {
                     </td>
                     <td>{row.course_title || "—"}</td>
                     <td>{row.start_at ? new Date(row.start_at).toLocaleString() : "—"}</td>
-                    <td>{row.end_at ? new Date(row.end_at).toLocaleString() : "—"}</td>
-                    <td>{row.location || "—"}</td>
+                    <td>{row.location || "Online"}</td>
+                    <td><span className="cla-pill">{row.status}</span></td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </section>
+
+        <section className="cla-card panel">
+          <div className="ph">
+            <div>
+              <h3>Past</h3>
+              <small>{past.length}</small>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Course</th>
+                <th>When</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {past.length === 0 ? (
+                <EmptyRow cols={4} message="No past sessions." />
+              ) : (
+                past.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.title}</td>
+                    <td>{row.course_title || "—"}</td>
+                    <td>{row.start_at ? new Date(row.start_at).toLocaleString() : "—"}</td>
                     <td><span className="cla-pill">{row.status}</span></td>
                   </tr>
                 ))

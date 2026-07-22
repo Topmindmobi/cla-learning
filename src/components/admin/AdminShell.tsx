@@ -8,14 +8,18 @@ import { signOut } from "@/app/auth/actions";
 type NavItem = { href: string; label: string; badge?: string; warn?: boolean };
 type NavGroup = { label?: string; items: NavItem[] };
 
-/** Restored from Base44 navConfig + CLA admin design shell. */
+/** Restored from Base44 navConfig + CLA admin design shell.
+ *  Improvements: Enrol (wizard+bulk), Applicants CRM, LMS, unified Assessments, Role privileges.
+ */
 const ADMIN_NAV: NavGroup[] = [
   { items: [{ href: "/admin", label: "Today" }] },
   {
     label: "Learners",
     items: [
       { href: "/admin/students", label: "Students" },
-      { href: "/admin/cohorts", label: "Cohorts & timetable" },
+      { href: "/admin/enrol", label: "Enrol" },
+      { href: "/admin/applicants", label: "Applicants" },
+      { href: "/admin/cohorts", label: "Cohorts" },
       { href: "/admin/attendance", label: "Attendance" },
       { href: "/admin/at-risk", label: "At risk", warn: true },
     ],
@@ -23,9 +27,10 @@ const ADMIN_NAV: NavGroup[] = [
   {
     label: "Teaching",
     items: [
-      { href: "/admin/courses", label: "Courses & syllabus" },
-      { href: "/admin/assessments", label: "Assessments & banks" },
-      { href: "/admin/sessions", label: "Live sessions" },
+      { href: "/admin/courses", label: "Courses" },
+      { href: "/admin/lms", label: "LMS" },
+      { href: "/admin/assessments", label: "Assessments" },
+      { href: "/admin/sessions", label: "Timetable" },
       { href: "/admin/instructors", label: "Instructors" },
     ],
   },
@@ -43,7 +48,8 @@ const ADMIN_NAV: NavGroup[] = [
       { href: "/account", label: "My profile" },
       { href: "/account/settings", label: "Account settings" },
       { href: "/admin/users", label: "Users & roles" },
-      { href: "/admin/content", label: "Site content" },
+      { href: "/admin/roles", label: "Role privileges" },
+      { href: "/admin/content", label: "Coupons" },
     ],
   },
 ];

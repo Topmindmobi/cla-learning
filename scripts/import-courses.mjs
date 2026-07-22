@@ -169,8 +169,8 @@ async function main() {
     process.exit(1);
   }
 
-  const { createClient } = await import("@supabase/supabase-js");
-  const supabase = createClient(url, serviceKey, { auth: { persistSession: false } });
+  const { createServiceClient } = await import("./lib/supabase-admin.mjs");
+  const supabase = createServiceClient(url, serviceKey);
 
   await ensureSlugColumn(supabase);
 

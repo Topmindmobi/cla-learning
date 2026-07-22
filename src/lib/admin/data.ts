@@ -102,6 +102,67 @@ export async function listAdminCourses(): Promise<AdminCourseRow[]> {
   return (data ?? []) as AdminCourseRow[];
 }
 
+export type CourseEditorRow = {
+  id: string;
+  slug: string | null;
+  title: string;
+  subtitle: string | null;
+  short_description: string | null;
+  full_description: string | null;
+  learning_outcomes: string | null;
+  target_audience: string | null;
+  course_requirements: string | null;
+  career_benefits: string | null;
+  category: string;
+  difficulty: string;
+  thumbnail_url: string | null;
+  instructor_name: string | null;
+  instructor_title: string | null;
+  duration_hours: number | null;
+  price: number;
+  currency: string;
+  language: string | null;
+  what_you_will_learn: string[];
+  requirements: string[];
+  is_published: boolean;
+  is_featured: boolean;
+};
+
+export async function getAdminCourse(id: string): Promise<CourseEditorRow | null> {
+  if (!isAdminClientConfigured()) return null;
+  const supabase = createAdminClient();
+  const { data, error } = await supabase.from("courses").select("*").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  return {
+    id: data.id as string,
+    slug: (data.slug as string | null) ?? null,
+    title: data.title as string,
+    subtitle: (data.subtitle as string | null) ?? null,
+    short_description: (data.short_description as string | null) ?? null,
+    full_description: (data.full_description as string | null) ?? null,
+    learning_outcomes: (data.learning_outcomes as string | null) ?? null,
+    target_audience: (data.target_audience as string | null) ?? null,
+    course_requirements: (data.course_requirements as string | null) ?? null,
+    career_benefits: (data.career_benefits as string | null) ?? null,
+    category: data.category as string,
+    difficulty: (data.difficulty as string) ?? "beginner",
+    thumbnail_url: (data.thumbnail_url as string | null) ?? null,
+    instructor_name: (data.instructor_name as string | null) ?? null,
+    instructor_title: (data.instructor_title as string | null) ?? null,
+    duration_hours: data.duration_hours != null ? Number(data.duration_hours) : null,
+    price: Number(data.price ?? 0),
+    currency: (data.currency as string) ?? "RWF",
+    language: (data.language as string | null) ?? "English",
+    what_you_will_learn: Array.isArray(data.what_you_will_learn)
+      ? (data.what_you_will_learn as string[])
+      : [],
+    requirements: Array.isArray(data.requirements) ? (data.requirements as string[]) : [],
+    is_published: Boolean(data.is_published),
+    is_featured: Boolean(data.is_featured),
+  };
+}
+
 export async function listAdminEnrollments(): Promise<AdminEnrollmentRow[]> {
   if (!isAdminClientConfigured()) return [];
   const supabase = createAdminClient();

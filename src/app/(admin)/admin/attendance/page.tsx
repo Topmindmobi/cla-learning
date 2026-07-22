@@ -1,5 +1,6 @@
 import { AdminTopBar, AdminPageHead, ConfigBanner, EmptyRow } from "@/components/admin/AdminUi";
 import { MarkAttendanceForm } from "@/components/admin/OpsForms";
+import { AttendanceRosterForm } from "@/components/admin/TeachingForms";
 import { listAttendance, listSessions } from "@/lib/admin/ops";
 import { isAdminClientConfigured } from "@/lib/supabase/admin";
 
@@ -15,18 +16,30 @@ export default async function AdminAttendancePage() {
       <div className="content">
         <AdminPageHead
           title="Attendance"
-          lede="Mark and review class attendance records."
+          lede="Mark one learner or paste a whole roster for a session."
         />
         <ConfigBanner ok={configured} />
 
         <section className="cla-card panel" style={{ marginBottom: 18 }}>
           <div className="ph">
             <div>
-              <h3>Mark attendance</h3>
-              <small>Record a student&apos;s attendance for a session</small>
+              <h3>Mark one</h3>
+              <small>Single student</small>
             </div>
           </div>
           <MarkAttendanceForm sessions={sessions} />
+        </section>
+
+        <section className="cla-card panel" style={{ marginBottom: 18 }}>
+          <div className="ph">
+            <div>
+              <h3>Roster mark</h3>
+              <small>email[,status] per line — present · absent · late · excused</small>
+            </div>
+          </div>
+          <div style={{ padding: "0 16px 16px" }}>
+            <AttendanceRosterForm sessions={sessions.map((s) => ({ id: s.id, title: s.title }))} />
+          </div>
         </section>
 
         <section className="cla-card panel">
